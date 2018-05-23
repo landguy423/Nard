@@ -1,6 +1,7 @@
 package com.nard;
 
 import com.facebook.react.ReactActivity;
+import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -10,6 +11,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "Nard";
+        return "nard";
     }
 }
