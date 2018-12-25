@@ -7,24 +7,17 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
   TouchableHighlight,
   ListView,
-  Keyboard,
-  findNodeHandle,  
-  RecyclerViewBackedScrollView,
   AsyncStorage,
   Platform,
   BackHandler,
   ImageBackground,
 } from 'react-native';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Spinner from 'react-native-loading-spinner-overlay';
-import OrientationLoadingOveraly from 'react-native-orientation-loading-overlay';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHeight, statusBar, navBar, NORMAL_FONT } from '../../styles/commonStyles';

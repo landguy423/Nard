@@ -2,26 +2,18 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
-  TouchableHighlight,
   ListView,
-  Keyboard,
-  findNodeHandle,  
-  RecyclerViewBackedScrollView,
   Platform,
   BackHandler,
 } from 'react-native';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Spinner from 'react-native-loading-spinner-overlay';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHeight, statusBar, navBar, subWidth, NORMAL_FONT } from '../../styles/commonStyles';

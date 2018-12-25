@@ -2,30 +2,20 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   TextInput,
   View,
-  Image,
-  Dimensions,
   TouchableOpacity,
   TouchableHighlight,
-  ListView,
-  Keyboard,
-  findNodeHandle,  
-  RecyclerViewBackedScrollView,
   Alert,
-  ScrollView,
   Platform,
   BackHandler,
   ImageBackground,
 } from 'react-native';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Spinner from 'react-native-loading-spinner-overlay';
 import OrientationLoadingOveraly from 'react-native-orientation-loading-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SimplePicker from 'react-native-simple-picker';

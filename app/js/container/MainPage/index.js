@@ -19,15 +19,10 @@ import {
   ImageBackground,
 } from 'react-native';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import OrientationLoadingOveraly from 'react-native-orientation-loading-overlay';
-import Spinner from 'react-native-loading-spinner-overlay';
-import timer from 'react-native-timer';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import PhoneInput from 'react-native-phone-input';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHeight, statusBar, navBar, subWidth, NORMAL_FONT, NORMAL_BOLD_FONT } from '../../styles/commonStyles';

@@ -2,33 +2,22 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
-  TouchableHighlight,
   ListView,
-  Keyboard,
-  findNodeHandle,  
-  RecyclerViewBackedScrollView,
-  AsyncStorage,
   Platform,
   BackHandler,
 } from 'react-native';
-import Storage from 'react-native-key-value-store';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Spinner from 'react-native-loading-spinner-overlay';
 import OrientationLoadingOveraly from 'react-native-orientation-loading-overlay';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHeight, statusBar, navBar, NORMAL_FONT, NORMAL_BOLD_FONT } from '../../styles/commonStyles';
-import language from '../../utils/language/language';
 import Container from '../Container';
 
 import { saveMenuSelectedID } from '../Menu/actions';
@@ -38,8 +27,6 @@ import { changeTokenStatus } from '../ParentComponent/actions';
 
 const arrow = require('../../../assets/imgs/my_services/arrow.png');
 const arrow_ar = require('../../../assets/imgs/my_services/arrow_ar.png');
-const scrollArrowDown = require('../../../assets/imgs/my_services/scroll_arrow.png');
-const scrollArrowUp = require('../../../assets/imgs/my_services/scroll_arrow_up.png');
 
 class Offers extends Component {
   constructor(props) {

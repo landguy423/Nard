@@ -7,19 +7,13 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
   Keyboard,
-  findNodeHandle,  
 } from 'react-native';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Drawer from 'react-native-drawer';
-
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import PhoneInput from 'react-native-phone-input';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHeight, statusBar, navBar, NORMAL_FONT } from '../../styles/commonStyles';
