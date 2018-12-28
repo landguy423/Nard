@@ -7,7 +7,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  ListView,
+  FlatList,
   Platform,
   BackHandler,
 } from 'react-native';
@@ -105,30 +105,23 @@ class Offers extends Component {
     Actions.StartProject();
   }
 
-  onEndReached() {
-    // this.setState({endList: true});
-  }
-
   onItemSelect(data, rowID) {
     Actions.OffersDetail({rowID: rowID, offerData: this.state.allOffer});
   }
 
-  handleScroll(event) {
-  }
-
- _renderRow (rowData, sectionID, rowID, highlightRow) {
+ _renderRow({ item, index }) {
     return (
       <View style={{
-                  backgroundColor: this.state.backColors[rowID % 3],
+                  backgroundColor: this.state.backColors[index % 3],
                   justifyContent: 'center',
                   alignItems: 'center',
                   width: screenWidth,
                   height: (screenHeight-12-navBar) / 4}}
       >
-        <TouchableOpacity onPress={()=>{this.onItemSelect(rowData, rowID)}}>
+        <TouchableOpacity onPress={()=>{this.onItemSelect(item, index)}}>
           <View style={styles.listView}>
             <View style={styles.titleWrapper}>
-              <Text  style={styles.offerTitle}>{rowData.title}</Text>
+              <Text  style={styles.offerTitle}>{item.title}</Text>
             </View>
             <Image source={ arrow } style={ styles.arrow } />
           </View>
@@ -137,20 +130,20 @@ class Offers extends Component {
     )
   }
 
-  _renderRow_ar (rowData, sectionID, rowID, highlightRow) {
+  _renderRow_ar({ item, index }) {
     return (
       <View style={{
-                  backgroundColor: this.state.backColors[rowID % 3],
+                  backgroundColor: this.state.backColors[index % 3],
                   justifyContent: 'center',
                   alignItems: 'center',
                   width: screenWidth,
                   height: (screenHeight-12-navBar) / 4}}
       >
-        <TouchableOpacity onPress={()=>{this.onItemSelect(rowData, rowID)}}>
+        <TouchableOpacity onPress={()=>{this.onItemSelect(item, index)}}>
           <View style={styles.listView}>
             <Image source={ arrow_ar } style={ styles.arrow } />
             <View style={styles.titleWrapper_ar}>
-              <Text  style={styles.offerTitle_ar}>{rowData.title}</Text>
+              <Text  style={styles.offerTitle_ar}>{item.title}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -158,48 +151,37 @@ class Offers extends Component {
     )
   }
 
-  _renderSeparator (sectionID, rowID, adjacentRowHighlighted) {
-      return (
-          rowID != 3 && (
-          <View
-              key={`${sectionID}-${rowID}`}
-              style={{ height: 4, backgroundColor: '#fff', flex:1}}
-          />
-          )
-      );
+  _renderSeparator () {
+    return (
+      <View
+        style={{ height: 4, backgroundColor: '#fff', flex:1}}
+      />
+    );
   }
 
   render() {
     const { currentLanguage } = this.props;
     const { offerList, loading } = this.state;
-    
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const dataSource = ds.cloneWithRows(offerList);
-    /* ************************ */
 
     return (
       <Container currentLanguage={currentLanguage} pageTitle="offers">
         <OrientationLoadingOveraly visible={ loading } />
         <View style={ styles.container } >
           {currentLanguage=='EN'
-          ?<ListView
-            ref='listview'
-            dataSource={dataSource}
-            enableEmptySections={true}
-            renderRow={this._renderRow.bind(this)}
-            renderSeparator={this._renderSeparator}
-            onScroll = {(event)=>this.handleScroll(event)}
-            onEndReached={()=>this.onEndReached()}
-          />
-          :<ListView
-            ref='listview'
-            dataSource={dataSource}
-            enableEmptySections={true}
-            renderRow={this._renderRow_ar.bind(this)}
-            renderSeparator={this._renderSeparator}
-            onScroll = {(event)=>this.handleScroll(event)}
-            onEndReached={()=>this.onEndReached()}
-          />
+          ? <FlatList
+              data={offerList}
+              keyExtractor={item => item}
+              renderItem={this._renderRow.bind(this)}
+              ItemSeparatorComponent={this._renderSeparator}
+              enableEmptySections
+            />
+          : <FlatList
+              data={offerList}
+              keyExtractor={item => item}
+              renderItem={this._renderRow_ar.bind(this)}
+              ItemSeparatorComponent={this._renderSeparator}
+              enableEmptySections
+            />
           }
         </View>
       </Container>

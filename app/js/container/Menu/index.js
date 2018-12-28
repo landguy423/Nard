@@ -6,13 +6,9 @@ import {
     Text,
     View,
     Image,
-    ListView,
-    RecyclerViewBackedScrollView,
     TouchableOpacity,
-    TouchableHighlight,
     Linking,
-    Keyboard,
-    AsyncStorage,
+    FlatList,
     ImageBackground,
 } from 'react-native';
 
@@ -149,30 +145,30 @@ class Menu extends Component {
     this.props.menuState();
   }
 
- _renderRow (rowData, sectionID, rowID, highlightRow) {
+ _renderRow ({ item, index }) {
    const { menuSelectedID, currentLanguage } = this.props;
     return (
-      <TouchableOpacity onPress={()=>{highlightRow(sectionID, rowID); this.onItemSelect(rowData, rowID)}}>
+      <TouchableOpacity onPress={()=> this.onItemSelect(item, index)}>
         {currentLanguage == 'EN' ?
-          <View style={rowID == menuSelectedID ? styles.listViewSelect : styles.listView}>
-            <Text  style={styles.listViewText}>{rowData}</Text>
+          <View style={index == menuSelectedID ? styles.listViewSelect : styles.listView}>
+            <Text  style={styles.listViewText}>{item}</Text>
             <Image source={ arrow } style={ styles.listArrow } resizeMode="contain" />
           </View> :
-          <View style={rowID == menuSelectedID ? styles.listViewSelect : styles.listView}>
+          <View style={index == menuSelectedID ? styles.listViewSelect : styles.listView}>
             <Image source={ arrow } style={ styles.listArrowAr } resizeMode="contain" />
-            <Text  style={styles.listViewText}>{rowData}</Text>
+            <Text  style={styles.listViewText}>{item}</Text>
           </View> 
         }
       </TouchableOpacity>
     )
   }
-  _renderSeparator (sectionID, rowID, adjacentRowHighlighted) {
-      return (
-        <View
-          key={`${sectionID}-${rowID}`}
-          style={{ height: 1, backgroundColor: '#3A3A3A', flex:1}}
-        />
-      );
+
+  _renderSeparator () {
+    return (
+      <View
+        style={{ height: 1, backgroundColor: '#3A3A3A', flex:1}}
+      />
+    );
   }
 
   render() {
@@ -196,8 +192,7 @@ class Menu extends Component {
             language.menuVisitNard[currentLanguage],
             language.menuLogout[currentLanguage]];
     }
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const dataSource = ds.cloneWithRows(menuItems);
+
     return (
       <View style={ styles.container } >
         <View style={styles.title}>
@@ -224,10 +219,11 @@ class Menu extends Component {
           </TouchableOpacity>
         </View>
         <View style={ styles.body }>
-          <ListView
-            dataSource={dataSource}
-            renderRow={this._renderRow.bind(this)}
-            renderSeparator={this._renderSeparator}
+          <FlatList
+            data={menuItems}
+            keyExtractor={item => item}
+            renderItem={this._renderRow.bind(this)}
+            ItemSeparatorComponent={this._renderSeparator}
           />
         </View>
       </View>

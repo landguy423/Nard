@@ -7,7 +7,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  ListView,
+  FlatList,
   Platform,
   BackHandler,
 } from 'react-native';
@@ -69,51 +69,42 @@ class Services extends Component {
   componentWillReceiveProps(nextProps) {
   }
 
-  onEndReached() {
-  }
-
   onItemSelect(data, rowID) {
     Actions.ServicesDetail({rowID: rowID, titleKey: data.titleKey});
   }
 
-  handleScroll(event) {
-  }
-
- _renderRow (rowData, sectionID, rowID, highlightRow) {
+ _renderRow ({ item, index }) {
     return (
-      <TouchableOpacity onPress={()=>{this.onItemSelect(rowData, rowID)}} style={styles.listWrapper}>
+      <TouchableOpacity onPress={()=>{this.onItemSelect(item, index)}} style={styles.listWrapper}>
         <View style={styles.listView}>
           <View style={styles.leftView}>
-            <Image source={ lists[rowID] } style={ styles.avatar} />
-            <Text  style={styles.title}>{rowData.title}</Text>
+            <Image source={ lists[index] } style={ styles.avatar} />
+            <Text  style={styles.title}>{item.title}</Text>
           </View>
           <Image source={ arrow } style={ styles.arrow} />
         </View>
       </TouchableOpacity>
     )
   }
-  _renderRow_ar (rowData, sectionID, rowID, highlightRow) {
+  _renderRow_ar ({ item, index }) {
     return (
-      <TouchableOpacity onPress={()=>{this.onItemSelect(rowData, rowID)}} style={styles.listWrapper}>
+      <TouchableOpacity onPress={()=>{this.onItemSelect(item, index)}} style={styles.listWrapper}>
         <View style={styles.listView}>
           <Image source={ arrow_ar } style={ styles.arrow} />
           <View style={styles.leftView}>
-            <Text  style={styles.title_ar}>{rowData.title}</Text>
-            <Image source={ lists[rowID] } style={ styles.avatar} />
+            <Text  style={styles.title_ar}>{item.title}</Text>
+            <Image source={ lists[index] } style={ styles.avatar} />
           </View>
         </View>
       </TouchableOpacity>
     )
   }
 
-  _renderSeparator (sectionID, rowID, adjacentRowHighlighted) {
+  _renderSeparator () {
     return (
-      rowID != 8 && (
       <View
-        key={`${sectionID}-${rowID}`}
         style={{ height: 1, backgroundColor: commonColors.separateGray, flex:1}}
       />
-      )
     );
   }
 
@@ -132,30 +123,25 @@ class Services extends Component {
       {id: 8, title: language.sKentico[currentLanguage], titleKey: "sKentico"},
       {id: 9, title: language.sMobile[currentLanguage], titleKey: "sMobile"},
     ];
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const dataSource = ds.cloneWithRows(serviceItems);
-    /* **************************** */
 
     return (
       <Container currentLanguage={currentLanguage} pageTitle="services">
         <View style={ styles.container } >
           {currentLanguage == 'EN'
-          ?<ListView
-            ref='listview'
-            dataSource={dataSource}
-            renderRow={this._renderRow.bind(this)}
-            renderSeparator={this._renderSeparator}
-            onScroll = {(event)=>this.handleScroll(event)}
-            onEndReached={()=>this.onEndReached()}
-          />
-          :<ListView
-            ref='listview'
-            dataSource={dataSource}
-            renderRow={this._renderRow_ar.bind(this)}
-            renderSeparator={this._renderSeparator}
-            onScroll = {(event)=>this.handleScroll(event)}
-            onEndReached={()=>this.onEndReached()}
-          />
+          ? <FlatList
+              data={serviceItems}
+              keyExtractor={item => item.id}
+              renderItem={this._renderRow.bind(this)}
+              ItemSeparatorComponent={this._renderSeparator}
+              enableEmptySections
+            />
+          : <FlatList
+              data={serviceItems}
+              keyExtractor={item => item.id}
+              renderItem={this._renderRow_ar.bind(this)}
+              ItemSeparatorComponent={this._renderSeparator}
+              enableEmptySections
+            />
           }
         </View>
       </Container>

@@ -107,7 +107,7 @@ class Container extends Component {
                     <Image source={ logo } resizeMode="center" style={ styles.logo } />
                     <TouchableOpacity
                       activeOpacity={ .5 }
-                      style={ styles.menu }
+                      style={ styles.menuHome }
                       onPress={ () => this.onChangeMenuState() }
                     >
                       <Image source={ menu } resizeMode="contain" style={styles.menuIcon} />  
@@ -189,6 +189,14 @@ const styles = StyleSheet.create({
   menu: {
     right: 0,
     paddingRight: 20,
+    paddingTop: statusBar - 10,
+    position: 'absolute',
+    width: 50,
+    height: 50,
+  },
+  menuHome: {
+    right: 0,
+    paddingRight: 20,
     paddingTop: statusBar,
     position: 'absolute',
     width: 50,
@@ -197,7 +205,7 @@ const styles = StyleSheet.create({
   back: {
     left: 0,
     paddingLeft: 20,
-    paddingTop: statusBar,
+    paddingTop: statusBar - 10,
     position: 'absolute',
     width: 50,
     height: 50,

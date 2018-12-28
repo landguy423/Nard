@@ -9,7 +9,7 @@ import {
   Image,
   TouchableOpacity,
   TouchableHighlight,
-  ListView,
+  FlatList,
   AsyncStorage,
   Platform,
   BackHandler,
@@ -157,10 +157,6 @@ class MyServices extends Component {
     this.setState({endList: false});
   }
 
-  onEndReached() {
-    // this.setState({endList: true});
-  }
-
   onItemSelect(data, rowID) {
     if (rowID == this.state.rowID)
       this.setState({rowID: null});
@@ -168,25 +164,22 @@ class MyServices extends Component {
       this.setState({rowID: rowID});
   }
 
-  handleScroll(event) {
-  }
-
- _renderRow (rowData, sectionID, rowID, highlightRow) {
+ _renderRow ({ item, index }) {
     const listSubView = [];
     
-    if (this.state.rowID == rowID) {
-      for (let i = 0; i < this.state.totalCount[rowID]; i ++) {
+    if (this.state.rowID == index) {
+      for (let i = 0; i < this.state.totalCount[index]; i ++) {
         listSubView.push(
-          <TouchableHighlight onPress={()=>this.onServiceSubItem(this.state.servicesData[rowID].domain[i])} key={i}>
+          <TouchableHighlight onPress={()=>this.onServiceSubItem(this.state.servicesData[index].domain[i])} key={i}>
             <View>
               <View
                 style={{ height: 2, backgroundColor: '#D6811D'}}
               />
               <View style={ styles.listSubWrapper } >
                 <View style={ styles.listSubView } >
-                  <Text  style={styles.serviceSubTitle}>{this.state.servicesData[rowID].domain[i].domain_name}</Text>
+                  <Text  style={styles.serviceSubTitle}>{this.state.servicesData[index].domain[i].domain_name}</Text>
                   <View style={styles.rightSubWrapper}>
-                    <Text  style={styles.serviceSubTitleDate}>{this.state.servicesData[rowID].domain[i].expired_date}</Text>
+                    <Text  style={styles.serviceSubTitleDate}>{this.state.servicesData[index].domain[i].expired_date}</Text>
                     <Image source={ arrow } style={ styles.subArrow } />
                   </View>
                 </View>
@@ -199,13 +192,13 @@ class MyServices extends Component {
 
     return (
       <View>
-        <TouchableHighlight onPress={()=>{this.onItemSelect(rowData, rowID)}}>
-          <ImageBackground source={ this.state.rowID == rowID ? rowData.image_select : rowData.image } style={ styles.serviceImage } >
+        <TouchableHighlight onPress={()=>{this.onItemSelect(item, index)}}>
+          <ImageBackground source={ this.state.rowID == index ? item.image_select : item.image } style={ styles.serviceImage } >
             <View style={styles.listView}>
-              <Text  style={[styles.serviceTitle, styles.titleStyle]}>{rowData.title}</Text>
-              { this.state.rowID != rowID && (
+              <Text  style={[styles.serviceTitle, styles.titleStyle]}>{item.title}</Text>
+              { this.state.rowID != index && (
               <View style={styles.rightWrapper}>
-                <Text  style={styles.serviceTitle}>{this.state.totalCount[rowID]}</Text>
+                <Text  style={styles.serviceTitle}>{this.state.totalCount[index]}</Text>
                 <Image source={ arrow } style={ styles.arrow } />
               </View> )}
             </View>
@@ -218,13 +211,13 @@ class MyServices extends Component {
     )
   }
 
-  _renderRow_ar (rowData, sectionID, rowID, highlightRow) {
+  _renderRow_ar ({ item, index }) {
     const listSubView = [];
 
-    if (this.state.rowID == rowID) {
-      for (let i = 0; i < this.state.totalCount[rowID]; i ++) {
+    if (this.state.rowID == index) {
+      for (let i = 0; i < this.state.totalCount[index]; i ++) {
         listSubView.push(
-          <TouchableHighlight onPress={()=>this.onServiceSubItem(this.state.servicesData[rowID].domain[i])} key={i}>
+          <TouchableHighlight onPress={()=>this.onServiceSubItem(this.state.servicesData[index].domain[i])} key={i}>
             <View>
               <View
                 style={{ height: 2, backgroundColor: '#D6811D'}}
@@ -233,9 +226,9 @@ class MyServices extends Component {
                 <View style={ styles.listSubView } >
                   <View style={styles.rightSubWrapper}>
                     <Image source={ arrow_ar } style={ styles.subArrow_ar } />
-                    <Text  style={styles.serviceSubTitleDate}>{this.state.servicesData[rowID].domain[i].expired_date}</Text>
+                    <Text  style={styles.serviceSubTitleDate}>{this.state.servicesData[index].domain[i].expired_date}</Text>
                   </View>
-                  <Text  style={styles.serviceSubTitle}>{this.state.servicesData[rowID].domain[i].domain_name}</Text>
+                  <Text  style={styles.serviceSubTitle}>{this.state.servicesData[index].domain[i].domain_name}</Text>
                 </View>
               </View>
             </View>
@@ -246,16 +239,16 @@ class MyServices extends Component {
 
     return (
       <View>
-        <TouchableHighlight onPress={()=>{this.onItemSelect(rowData, rowID)}}>
-          <ImageBackground source={ this.state.rowID == rowID ? rowData.image_select : rowData.image } style={ styles.serviceImage } >
+        <TouchableHighlight onPress={()=>{this.onItemSelect(item, index)}}>
+          <ImageBackground source={ this.state.rowID == index ? item.image_select : item.image } style={ styles.serviceImage } >
             <View style={styles.listView}>
-              { this.state.rowID != rowID ?
+              { this.state.rowID != index ?
               <View style={styles.rightWrapper}>
                 <Image source={ arrow_ar } style={ styles.arrow_ar } />
-                <Text  style={styles.serviceTitle}>{this.state.totalCount[rowID]}</Text>
+                <Text  style={styles.serviceTitle}>{this.state.totalCount[index]}</Text>
               </View>
               :<View style={{width: 50}} />}
-              <Text  style={[styles.serviceTitle, styles.titleStyle_ar]}>{rowData.title}</Text>
+              <Text  style={[styles.serviceTitle, styles.titleStyle_ar]}>{item.title}</Text>
             </View>
           </ImageBackground>
         </TouchableHighlight>
@@ -266,15 +259,12 @@ class MyServices extends Component {
     )
   }
 
-  _renderSeparator (sectionID, rowID, adjacentRowHighlighted) {
-      return (
-          rowID != 6 && (
-          <View
-              key={`${sectionID}-${rowID}`}
-              style={{ height: 4, backgroundColor: commonColors.title, flex:1}}
-          />
-          )
-      );
+  _renderSeparator () {
+    return (
+      <View
+        style={{ height: 4, backgroundColor: commonColors.title, flex:1 }}
+      />
+    );
   }
 
   render() {
@@ -291,9 +281,6 @@ class MyServices extends Component {
       {id: 6, title: language.kenticoText[currentLanguage], image: kentico, image_select: kentico_select},
       {id: 7, title: language.chatText[currentLanguage], image: chat, image_select: chat_select},
     ];
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const dataSource = ds.cloneWithRows(serviceItems);
-    /* ************************ */
 
     return (
       <Container currentLanguage={currentLanguage} pageTitle="ourServices">
@@ -303,11 +290,11 @@ class MyServices extends Component {
             <Text style={styles.titleText}>{language.serviceName[currentLanguage]}</Text>
             <Text style={styles.titleText}>{language.totalCount[currentLanguage]}</Text>
           </View>
-          <ListView
-            ref='listview'
-            dataSource={dataSource}
-            renderRow={this._renderRow.bind(this)}
-            renderSeparator={this._renderSeparator}
+          <FlatList
+            data={serviceItems}
+            keyExtractor={item => item.id}
+            renderItem={this._renderRow.bind(this)}
+            ItemSeparatorComponent={this._renderSeparator}
             onScroll = {(event)=>this.handleScroll(event)}
             onEndReached={()=>this.onEndReached()}
           />
@@ -317,14 +304,13 @@ class MyServices extends Component {
             <Text style={styles.titleText}>{language.totalCount[currentLanguage]}</Text>
             <Text style={styles.titleText}>{language.serviceName[currentLanguage]}</Text>
           </View>
-          <ListView
-            ref='listview'
-            dataSource={dataSource}
-            renderRow={this._renderRow_ar.bind(this)}
-            renderSeparator={this._renderSeparator}
+          <FlatList
+            data={serviceItems}
+            keyExtractor={item => item.id}
+            renderItem={this._renderRow_ar.bind(this)}
+            ItemSeparatorComponent={this._renderSeparator}
             onScroll = {(event)=>this.handleScroll(event)}
-            onEndReached={()=>this.onEndReached()}
-          />
+          />          
         </View>
         }
         <View style={styles.scrollArrow}>
